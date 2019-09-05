@@ -1,0 +1,100 @@
+@import "../../themes/ionic.globals";
+
+// K-Infinite Scroll
+// --------------------------------------------------
+
+
+$k-infinite-scroll-height:                 40px !default;
+
+/// @prop - Color of the k-infinite scroll loading indicator
+$k-infinite-scroll-loading-color:          #666 !default;
+
+/// @prop - Text color of the k-infinite scroll loading indicator
+$k-infinite-scroll-loading-text-color:     $k-infinite-scroll-loading-color !default;
+
+/// @prop - Color of the k-infinite scroll loading indicator
+$k-infinite-scroll-complete-color:          #666 !default;
+
+/// @prop - Text color of the k-infinite scroll loading indicator
+$k-infinite-scroll-complete-text-color:     $k-infinite-scroll-complete-color !default;
+
+k-infinite-scroll {
+  @include position(null, 0, null, 0);
+  position:absolute;
+  z-index:$z-index-k-infinite-scroll;
+
+  display:none;
+
+  width: 100%;
+  height:$k-infinite-scroll-height;
+
+  &.infinite-scroll-active{
+    display:block;
+  }
+}
+
+
+// Infinite Scroll Content
+// --------------------------------------------------
+
+k-infinite-scroll-content {
+  @include text-align(center);
+
+  display: flex;
+
+  flex-direction: column;
+  justify-content: center;
+
+  height: 100%;
+  min-height: $k-infinite-scroll-height;
+}
+
+.infinite-loading {
+  display: none;
+
+  width: 100%;
+
+  @include margin(null, null, 0, null);
+}
+
+.infinite-loading-text {
+  color: $k-infinite-scroll-loading-text-color;
+}
+
+.infinite-complete{
+  display:none;
+
+  width:100%;
+}
+
+.infinite-complete-text {
+  color: $k-infinite-scroll-complete-text-color;
+}
+
+.infinite-loading-spinner .spinner-ios line,
+.infinite-loading-spinner .spinner-ios-small line,
+.infinite-loading-spinner .spinner-crescent circle {
+  stroke: $k-infinite-scroll-loading-color;
+}
+
+.infinite-loading-spinner .spinner-bubbles circle,
+.infinite-loading-spinner .spinner-circles circle,
+.infinite-loading-spinner .spinner-dots circle {
+  fill: $k-infinite-scroll-loading-color;
+}
+
+
+// Infinite Scroll Content States
+// --------------------------------------------------
+
+k-infinite-scroll-content[state=pulling] .infinite-loading,
+k-infinite-scroll-content[state=ready] .infinite-loading,
+k-infinite-scroll-content[state=loading] .infinite-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+k-infinite-scroll-content[state=completing] .infinite-complete{
+  display:block;
+}
