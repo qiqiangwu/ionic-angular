@@ -4,7 +4,7 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "@angular/core", "../content/content", "../../platform/dom-controller", "../../util/util", "../../gestures/gesture-controller", "../../gestures/ui-event-manager", "../../platform/platform", "../../util/dom"], factory);
+        define(["require", "exports", "@angular/core", "../content/content", "../../platform/dom-controller", "../../gestures/gesture-controller", "../../gestures/ui-event-manager", "../../platform/platform", "../../util/dom"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -12,7 +12,6 @@
     var core_1 = require("@angular/core");
     var content_1 = require("../content/content");
     var dom_controller_1 = require("../../platform/dom-controller");
-    var util_1 = require("../../util/util");
     var gesture_controller_1 = require("../../gestures/gesture-controller");
     var ui_event_manager_1 = require("../../gestures/ui-event-manager");
     var platform_1 = require("../../platform/platform");
@@ -55,16 +54,18 @@
              * @input {boolean} If the infinite scroll is enabled or not. This should be used in place of an `ngIf`. Default is `true`.
              */
             get: function () {
-                return this._isEnabled;
+                return this.state === STATE_ENABLED;
             },
-            set: function (val) {
-                this._isEnabled = util_1.isTrueProperty(val);
-                this._setListeners(this._isEnabled);
+            set: function (shouldEnable) {
+                this.state = (shouldEnable ? STATE_ENABLED : STATE_DISABLED);
             },
             enumerable: true,
             configurable: true
         });
         KInfiniteScroll.prototype._onStart = function (ev) {
+            if (this.state === STATE_DISABLED) {
+                return false;
+            }
             // if multitouch then get out immediately
             if (ev.touches && ev.touches.length > 1) {
                 return false;
@@ -322,5 +323,7 @@
     var STATE_LOADING = 'loading';
     var STATE_CANCELLING = 'cancelling';
     var STATE_COMPLETING = 'completing';
+    var STATE_ENABLED = 'enabled';
+    var STATE_DISABLED = 'disabled';
 });
 //# sourceMappingURL=k-infinite-scroll.js.map

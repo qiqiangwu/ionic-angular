@@ -64210,16 +64210,18 @@ var KInfiniteScroll = (function () {
          * @input {boolean} If the infinite scroll is enabled or not. This should be used in place of an `ngIf`. Default is `true`.
          */
         get: function () {
-            return this._isEnabled;
+            return this.state === STATE_ENABLED$1;
         },
-        set: function (val) {
-            this._isEnabled = isTrueProperty(val);
-            this._setListeners(this._isEnabled);
+        set: function (shouldEnable) {
+            this.state = (shouldEnable ? STATE_ENABLED$1 : STATE_DISABLED$1);
         },
         enumerable: true,
         configurable: true
     });
     KInfiniteScroll.prototype._onStart = function (ev) {
+        if (this.state === STATE_DISABLED$1) {
+            return false;
+        }
         // if multitouch then get out immediately
         if (ev.touches && ev.touches.length > 1) {
             return false;
@@ -64476,6 +64478,8 @@ var STATE_READY$1 = 'ready';
 var STATE_LOADING$1 = 'loading';
 var STATE_CANCELLING$1 = 'cancelling';
 var STATE_COMPLETING$1 = 'completing';
+var STATE_ENABLED$1 = 'enabled';
+var STATE_DISABLED$1 = 'disabled';
 
 /**
  * @hidden

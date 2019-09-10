@@ -1,7 +1,6 @@
 import { Directive, ElementRef, EventEmitter, Input, NgZone, Output } from '@angular/core';
 import { Content } from '../content/content';
 import { DomController } from '../../platform/dom-controller';
-import { isTrueProperty } from '../../util/util';
 import { GestureController, } from '../../gestures/gesture-controller';
 import { UIEventManager } from '../../gestures/ui-event-manager';
 import { Platform } from '../../platform/platform';
@@ -43,13 +42,15 @@ export class KInfiniteScroll {
      * @input {boolean} If the infinite scroll is enabled or not. This should be used in place of an `ngIf`. Default is `true`.
      */
     get enabled() {
-        return this._isEnabled;
+        return this.state === STATE_ENABLED;
     }
-    set enabled(val) {
-        this._isEnabled = isTrueProperty(val);
-        this._setListeners(this._isEnabled);
+    set enabled(shouldEnable) {
+        this.state = (shouldEnable ? STATE_ENABLED : STATE_DISABLED);
     }
     _onStart(ev) {
+        if (this.state === STATE_DISABLED) {
+            return false;
+        }
         // if multitouch then get out immediately
         if (ev.touches && ev.touches.length > 1) {
             return false;
@@ -303,4 +304,6 @@ const STATE_READY = 'ready';
 const STATE_LOADING = 'loading';
 const STATE_CANCELLING = 'cancelling';
 const STATE_COMPLETING = 'completing';
+const STATE_ENABLED = 'enabled';
+const STATE_DISABLED = 'disabled';
 //# sourceMappingURL=k-infinite-scroll.js.map
