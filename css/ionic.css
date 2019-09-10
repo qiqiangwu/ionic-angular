@@ -10087,12 +10087,10 @@ ion-refresher-content {
   justify-content: center;
   height: 100%; }
 
-.refresher-pulling,
 .refresher-refreshing {
   display: none;
   width: 100%; }
 
-.refresher-pulling-icon,
 .refresher-refreshing-icon {
   text-align: center;
   -webkit-transform-origin: center;
@@ -10101,7 +10099,6 @@ ion-refresher-content {
   color: #000;
   transition: 200ms; }
 
-.refresher-pulling-text,
 .refresher-refreshing-text {
   text-align: center;
   font-size: 16px;
@@ -10117,32 +10114,16 @@ ion-refresher-content {
 .refresher-refreshing .spinner-dots circle {
   fill: #000; }
 
-ion-refresher-content[state=pulling] .refresher-pulling {
-  display: block; }
-
-ion-refresher-content[state=ready] .refresher-pulling {
-  display: block; }
-
-ion-refresher-content[state=ready] .refresher-pulling-icon {
-  -webkit-transform: rotate(180deg);
-  transform: rotate(180deg); }
-
+ion-refresher-content[state=pulling] .refresher-refreshing,
+ion-refresher-content[state=ready] .refresher-refreshing,
 ion-refresher-content[state=refreshing] .refresher-refreshing {
   display: block; }
 
-ion-refresher-content[state=cancelling] .refresher-pulling {
+ion-refresher-content[state=cancelling] .refresher-refreshing {
   display: block; }
-
-ion-refresher-content[state=cancelling] .refresher-pulling-icon {
-  -webkit-transform: scale(0);
-  transform: scale(0); }
 
 ion-refresher-content[state=completing] .refresher-refreshing {
   display: block; }
-
-ion-refresher-content[state=completing] .refresher-refreshing-icon {
-  -webkit-transform: scale(0);
-  transform: scale(0); }
 
 ion-scroll {
   position: relative;

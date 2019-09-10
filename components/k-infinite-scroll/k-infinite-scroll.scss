@@ -10,13 +10,13 @@ $k-infinite-scroll-height:                 40px !default;
 $k-infinite-scroll-loading-color:          #666 !default;
 
 /// @prop - Text color of the k-infinite scroll loading indicator
-$k-infinite-scroll-loading-text-color:     $k-infinite-scroll-loading-color !default;
+$k-infinite-scroll-loading-text-color:     #666 !default;
 
 /// @prop - Color of the k-infinite scroll loading indicator
 $k-infinite-scroll-complete-color:          #666 !default;
 
 /// @prop - Text color of the k-infinite scroll loading indicator
-$k-infinite-scroll-complete-text-color:     $k-infinite-scroll-complete-color !default;
+$k-infinite-scroll-complete-text-color:     #666 !default;
 
 k-infinite-scroll {
   @include position(null, 0, null, 0);
@@ -69,6 +69,7 @@ k-infinite-scroll-content {
 
 .infinite-complete-text {
   color: $k-infinite-scroll-complete-text-color;
+  @include margin(0, 0, 0, 5);
 }
 
 .infinite-loading-spinner .spinner-ios line,

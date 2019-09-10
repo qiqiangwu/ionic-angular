@@ -188,9 +188,6 @@ var Refresher = (function () {
         if (ev.touches && ev.touches.length > 1) {
             return false;
         }
-        if (this.state !== STATE_INACTIVE) {
-            return false;
-        }
         var scrollHostScrollTop = this._content.getContentDimensions().scrollTop;
         // if the scrollTop is greater than zero then it's
         // not possible to pull the content down yet
@@ -201,23 +198,29 @@ var Refresher = (function () {
             return false;
         }
         var coord = pointerCoord(ev);
-        (void 0) /* console.debug */;
         if (this._content.contentTop > 0) {
             var newTop = this._content.contentTop + 'px';
             if (this._top !== newTop) {
                 this._top = newTop;
             }
         }
-        this.startY = this.currentY = coord.y;
-        this.progress = 0;
-        this.state = STATE_INACTIVE;
+        if (this.state === STATE_INACTIVE) {
+            this.startY = this.currentY = coord.y;
+            this.progress = 0;
+            this.state = STATE_INACTIVE;
+        }
         return true;
     };
     Refresher.prototype._onMove = function (ev) {
+        var _this = this;
+        if (this.state === STATE_PULLING
+            || this.state === STATE_READY) {
+            // 阻止原生的滚动事件
+            ev.preventDefault();
+        }
         // this method can get called like a bazillion times per second,
         // so it's built to be as efficient as possible, and does its
         // best to do any DOM read/writes only when absolutely necessary
-        var _this = this;
         // if multitouch then get out immediately
         if (ev.touches && ev.touches.length > 1) {
             return 1;
@@ -277,11 +280,9 @@ var Refresher = (function () {
             // content scrolled all the way to the top, and dragging down
             this.state = STATE_PULLING;
         }
-        // prevent native scroll events
-        ev.preventDefault();
         // the refresher is actively pulling at this point
         // move the scroll element within the content element
-        this._setCss(this.deltaY, '0ms', true, '');
+        this._setCss(this.deltaY, '0ms', false, '');
         if (!this.deltaY) {
             // don't continue if there's no delta yet
             this.progress = 0;

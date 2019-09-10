@@ -69,9 +69,6 @@
             if (ev.touches && ev.touches.length > 1) {
                 return false;
             }
-            if (this.state !== STATE_INACTIVE) {
-                return false;
-            }
             if (!this._gesture.canStart()) {
                 return false;
             }
@@ -82,14 +79,21 @@
             if (scrollTop + contentHeight < scrollHeight) {
                 return false;
             }
-            var coord = dom_1.pointerCoord(ev);
-            this.progress = 0;
-            this.startY = this.currentY = coord.y;
-            this.state = STATE_INACTIVE;
+            if (this.state === STATE_INACTIVE) {
+                var coord = dom_1.pointerCoord(ev);
+                this.progress = 0;
+                this.startY = this.currentY = coord.y;
+                this.state = STATE_INACTIVE;
+            }
             return true;
         };
         KInfiniteScroll.prototype._onMove = function (ev) {
             var _this = this;
+            if (this.state === STATE_PULLING
+                || this.state === STATE_READY) {
+                // 阻止原生的滚动事件
+                ev.preventDefault();
+            }
             // if multitouch then get out immediately
             if (ev.touches && ev.touches.length > 1) {
                 return 1;
@@ -100,7 +104,7 @@
             // do nothing if it's actively infiniting
             // or it's in the process of closing
             // or this was never a startY
-            if (this.startY === null || this.state === STATE_LOADING || this.state === STATE_CANCELLING || this.state === STATE_COMPLETING) {
+            if (this.startY === null || this.state === STATE_CANCELLING || this.state === STATE_COMPLETING) {
                 return 2;
             }
             // if we just updated stuff less than 16ms ago
@@ -147,9 +151,7 @@
                 // 到达页面底部，可以上拉操作
                 this.state = STATE_PULLING;
             }
-            // 阻止原生的滚动事件
-            ev.preventDefault();
-            this._setCss(this.deltaY, '0ms', true, '');
+            this._setCss(this.deltaY, '0ms', false, '');
             if (!this.deltaY) {
                 // 如果delta = 0, 退出
                 this.progress = 0;

@@ -62,14 +62,12 @@ ion-refresher-content {
   height: 100%;
 }
 
-.refresher-pulling,
 .refresher-refreshing {
   display: none;
 
   width: 100%;
 }
 
-.refresher-pulling-icon,
 .refresher-refreshing-icon {
   @include text-align(center);
   @include transform-origin(center);
@@ -79,7 +77,6 @@ ion-refresher-content {
   transition: 200ms;
 }
 
-.refresher-pulling-text,
 .refresher-refreshing-text {
   @include text-align(center);
 
@@ -103,22 +100,8 @@ ion-refresher-content {
 // Refresher Content States
 // --------------------------------------------------
 
-ion-refresher-content[state=pulling] {
-  .refresher-pulling {
-    display: block;
-  }
-}
-
-ion-refresher-content[state=ready] {
-  .refresher-pulling {
-    display: block;
-  }
-
-  .refresher-pulling-icon {
-    transform: rotate(180deg);
-  }
-}
-
+ion-refresher-content[state=pulling],
+ion-refresher-content[state=ready],
 ion-refresher-content[state=refreshing] {
   .refresher-refreshing {
     display: block;
@@ -126,21 +109,13 @@ ion-refresher-content[state=refreshing] {
 }
 
 ion-refresher-content[state=cancelling] {
-  .refresher-pulling {
+  .refresher-refreshing {
     display: block;
-  }
-
-  .refresher-pulling-icon {
-    transform: scale(0);
   }
 }
 
 ion-refresher-content[state=completing] {
   .refresher-refreshing {
     display: block;
-  }
-
-  .refresher-refreshing-icon {
-    transform: scale(0);
   }
 }

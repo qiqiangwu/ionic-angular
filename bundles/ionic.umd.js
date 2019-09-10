@@ -54267,9 +54267,6 @@ var Refresher = (function () {
         if (ev.touches && ev.touches.length > 1) {
             return false;
         }
-        if (this.state !== STATE_INACTIVE) {
-            return false;
-        }
         var scrollHostScrollTop = this._content.getContentDimensions().scrollTop;
         // if the scrollTop is greater than zero then it's
         // not possible to pull the content down yet
@@ -54280,23 +54277,29 @@ var Refresher = (function () {
             return false;
         }
         var coord = pointerCoord(ev);
-        (void 0) /* console.debug */;
         if (this._content.contentTop > 0) {
             var newTop = this._content.contentTop + 'px';
             if (this._top !== newTop) {
                 this._top = newTop;
             }
         }
-        this.startY = this.currentY = coord.y;
-        this.progress = 0;
-        this.state = STATE_INACTIVE;
+        if (this.state === STATE_INACTIVE) {
+            this.startY = this.currentY = coord.y;
+            this.progress = 0;
+            this.state = STATE_INACTIVE;
+        }
         return true;
     };
     Refresher.prototype._onMove = function (ev) {
+        var _this = this;
+        if (this.state === STATE_PULLING
+            || this.state === STATE_READY) {
+            // 阻止原生的滚动事件
+            ev.preventDefault();
+        }
         // this method can get called like a bazillion times per second,
         // so it's built to be as efficient as possible, and does its
         // best to do any DOM read/writes only when absolutely necessary
-        var _this = this;
         // if multitouch then get out immediately
         if (ev.touches && ev.touches.length > 1) {
             return 1;
@@ -54356,11 +54359,9 @@ var Refresher = (function () {
             // content scrolled all the way to the top, and dragging down
             this.state = STATE_PULLING;
         }
-        // prevent native scroll events
-        ev.preventDefault();
         // the refresher is actively pulling at this point
         // move the scroll element within the content element
-        this._setCss(this.deltaY, '0ms', true, '');
+        this._setCss(this.deltaY, '0ms', false, '');
         if (!this.deltaY) {
             // don't continue if there's no delta yet
             this.progress = 0;
@@ -54567,20 +54568,14 @@ var RefresherContent = (function () {
     RefresherContent.decorators = [
         { type: Component, args: [{
                     selector: 'ion-refresher-content',
-                    template: '<div class="refresher-pulling">' +
-                        '<div class="refresher-pulling-icon" *ngIf="pullingIcon">' +
-                        '<ion-icon [name]="pullingIcon"></ion-icon>' +
-                        '</div>' +
-                        '<div class="refresher-pulling-text" [innerHTML]="pullingText" *ngIf="pullingText"></div>' +
-                        '</div>' +
-                        '<div class="refresher-refreshing">' +
+                    template: '<div class="refresher-refreshing">' +
                         '<div class="refresher-refreshing-icon">' +
                         '<ion-spinner [name]="refreshingSpinner"></ion-spinner>' +
                         '</div>' +
                         '<div class="refresher-refreshing-text" [innerHTML]="refreshingText" *ngIf="refreshingText"></div>' +
                         '</div>',
                     host: {
-                        '[attr.state]': 'r.state'
+                        '[attr.state]': 'r.state',
                     },
                     encapsulation: ViewEncapsulation.None,
                 },] },
@@ -64229,9 +64224,6 @@ var KInfiniteScroll = (function () {
         if (ev.touches && ev.touches.length > 1) {
             return false;
         }
-        if (this.state !== STATE_INACTIVE$1) {
-            return false;
-        }
         if (!this._gesture.canStart()) {
             return false;
         }
@@ -64242,14 +64234,21 @@ var KInfiniteScroll = (function () {
         if (scrollTop + contentHeight < scrollHeight) {
             return false;
         }
-        var coord = pointerCoord(ev);
-        this.progress = 0;
-        this.startY = this.currentY = coord.y;
-        this.state = STATE_INACTIVE$1;
+        if (this.state === STATE_INACTIVE$1) {
+            var coord = pointerCoord(ev);
+            this.progress = 0;
+            this.startY = this.currentY = coord.y;
+            this.state = STATE_INACTIVE$1;
+        }
         return true;
     };
     KInfiniteScroll.prototype._onMove = function (ev) {
         var _this = this;
+        if (this.state === STATE_PULLING$1
+            || this.state === STATE_READY$1) {
+            // 阻止原生的滚动事件
+            ev.preventDefault();
+        }
         // if multitouch then get out immediately
         if (ev.touches && ev.touches.length > 1) {
             return 1;
@@ -64260,7 +64259,7 @@ var KInfiniteScroll = (function () {
         // do nothing if it's actively infiniting
         // or it's in the process of closing
         // or this was never a startY
-        if (this.startY === null || this.state === STATE_LOADING$1 || this.state === STATE_CANCELLING$1 || this.state === STATE_COMPLETING$1) {
+        if (this.startY === null || this.state === STATE_CANCELLING$1 || this.state === STATE_COMPLETING$1) {
             return 2;
         }
         // if we just updated stuff less than 16ms ago
@@ -64307,9 +64306,7 @@ var KInfiniteScroll = (function () {
             // 到达页面底部，可以上拉操作
             this.state = STATE_PULLING$1;
         }
-        // 阻止原生的滚动事件
-        ev.preventDefault();
-        this._setCss(this.deltaY, '0ms', true, '');
+        this._setCss(this.deltaY, '0ms', false, '');
         if (!this.deltaY) {
             // 如果delta = 0, 退出
             this.progress = 0;
