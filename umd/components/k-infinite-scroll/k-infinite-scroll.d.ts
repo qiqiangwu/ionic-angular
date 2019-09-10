@@ -28,7 +28,7 @@ export declare class KInfiniteScroll {
     /**
      * @input {boolean} If the infinite scroll is enabled or not. This should be used in place of an `ngIf`. Default is `true`.
      */
-    enabled: boolean;
+    readonly enabled: boolean;
     pullMin: number;
     pullMax: number;
     /**
@@ -43,6 +43,7 @@ export declare class KInfiniteScroll {
      */
     ionInfinite: EventEmitter<KInfiniteScroll>;
     constructor(_content: Content, _zone: NgZone, _elementRef: ElementRef, _dom: DomController, _plt: Platform, gestureCtrl: GestureController);
+    enable(shouldEnable: boolean): void;
     _onStart(ev: TouchEvent): any;
     _onMove(ev: TouchEvent): 1 | 2 | 3 | 0 | 5 | 6 | 8 | 7;
     _onMoveInZone(): 2 | 4;

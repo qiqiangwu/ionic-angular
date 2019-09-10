@@ -56,12 +56,12 @@
             get: function () {
                 return this.state === STATE_ENABLED;
             },
-            set: function (shouldEnable) {
-                this.state = (shouldEnable ? STATE_ENABLED : STATE_DISABLED);
-            },
             enumerable: true,
             configurable: true
         });
+        KInfiniteScroll.prototype.enable = function (shouldEnable) {
+            this.state = (shouldEnable ? STATE_ENABLED : STATE_DISABLED);
+        };
         KInfiniteScroll.prototype._onStart = function (ev) {
             if (this.state === STATE_DISABLED) {
                 return false;

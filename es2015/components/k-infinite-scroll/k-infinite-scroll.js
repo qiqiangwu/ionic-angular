@@ -44,7 +44,7 @@ export class KInfiniteScroll {
     get enabled() {
         return this.state === STATE_ENABLED;
     }
-    set enabled(shouldEnable) {
+    enable(shouldEnable) {
         this.state = (shouldEnable ? STATE_ENABLED : STATE_DISABLED);
     }
     _onStart(ev) {
