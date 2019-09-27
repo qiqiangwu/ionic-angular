@@ -74,7 +74,7 @@
                 return false;
             }
             var cd = this._content.getContentDimensions();
-            var scrollTop = cd.scrollTop;
+            var scrollTop = Math.ceil(cd.scrollTop);
             var contentHeight = cd.contentHeight;
             var scrollHeight = cd.scrollHeight;
             if (scrollTop + contentHeight < scrollHeight) {

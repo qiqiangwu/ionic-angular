@@ -59,7 +59,7 @@ export class KInfiniteScroll {
             return false;
         }
         const cd = this._content.getContentDimensions();
-        const scrollTop = cd.scrollTop;
+        const scrollTop = Math.ceil(cd.scrollTop);
         const contentHeight = cd.contentHeight;
         const scrollHeight = cd.scrollHeight;
         if (scrollTop + contentHeight < scrollHeight) {
